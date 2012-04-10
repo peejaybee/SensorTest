@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, TestApp</string>
+    <string name="app_name">Test App</string>
+<string name="label_x">X: </string>
+<string name="label_y">Y: </string>
+<string name="label_z">Z: </string>
+<string name="value_zero">0</string>
+<string name="label_mag">Magnetometer</string>
+<string name="label_accel">Accelerometer</string>
+
+<string name="label_total">Magnitude</string>
+
+</resources>
