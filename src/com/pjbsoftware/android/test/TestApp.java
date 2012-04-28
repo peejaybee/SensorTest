@@ -2,8 +2,10 @@ package com.pjbsoftware.android.test;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.hardware.SensorListener;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.widget.TextView;
 
 
@@ -19,6 +21,10 @@ public class TestApp extends Activity  {
     TextView mFieldMagY;
     TextView mFieldMagZ;
     TextView mFieldMagMag;
+    
+    private Sensor mAccelerometer;
+    private Sensor mMagnetometer;
+    private SensorManager mSensorManager;
 
     /** Called when the activity is first created. */
     @Override
@@ -37,34 +43,42 @@ public class TestApp extends Activity  {
         mFieldMagMag = (TextView)findViewById(R.id.mag_total);
 
         
-        SensorManager sm = (SensorManager) this.getSystemService(SENSOR_SERVICE);
+        mSensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         
-        sm.registerListener(new SensorListener() { 
+    }
+    
+    protected void onResume()
+    {
+    	super.onResume();
+    	mSensorManager.registerListener(new SensorEventListener() { 
             
-            public void onSensorChanged(int whichOne, float[] values)
+            public void onSensorChanged(SensorEvent e)
             { 
-                updateAccelValues(values);
+                updateAccelValues(e.values);
             }
 
-    	public void onAccuracyChanged(int sensor, int accuracy)
+    	public void onAccuracyChanged(Sensor sensor, int accuracy)
     	{
     	    // TODO Auto-generated method stub
     	    
-    	}}, SensorManager.SENSOR_ACCELEROMETER );
+    	}}, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL );
  
-        sm.registerListener(new SensorListener() 
+    	mSensorManager.registerListener(new SensorEventListener() 
         { 
             
-            public void onSensorChanged(int whichOne, float[] values)
+            public void onSensorChanged(SensorEvent e)
             { 
-                updateMagValues(values);
+                updateMagValues(e.values);
             }
 
-    	public void onAccuracyChanged(int sensor, int accuracy)
+    	public void onAccuracyChanged(Sensor sensor, int accuracy)
     	{
     	    // TODO Auto-generated method stub
     	    
-    	}}, SensorManager.SENSOR_MAGNETIC_FIELD );
+    	}}, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL );
+	
     }
     
     void updateAccelValues(float[] values)
